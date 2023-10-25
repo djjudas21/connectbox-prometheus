@@ -1,5 +1,8 @@
 FROM python:3-alpine
 
+WORKDIR /opt/connectbox-prometheus
+COPY resources/requirements/production.txt requirements.txt
+
 RUN apk add --no-cache --virtual .build-deps \
         g++ \
         python3-dev \
@@ -7,11 +10,8 @@ RUN apk add --no-cache --virtual .build-deps \
         libxml2-dev \
     && apk add \
         libxslt-dev \
-        su-exec
-
-WORKDIR /opt/connectbox-prometheus
-COPY resources/requirements/production.txt requirements.txt
-RUN pip3 --no-cache-dir install -r requirements.txt \
+        su-exec \
+    && pip3 --no-cache-dir install -r requirements.txt \
     && apk del .build-deps
 
 COPY . .
